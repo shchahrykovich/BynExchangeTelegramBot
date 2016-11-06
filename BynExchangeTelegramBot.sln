@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{530F0C00-0D2E-4094-95EC-2711901E4C38}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5026E860-0BB7-49F9-8218-5EA0ACA0DEF4}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BynExchangeTelegramBot", "src\BynExchangeTelegramBot\BynExchangeTelegramBot.xproj", "{2320D9B4-AAE2-400C-92B8-4A260AFF8801}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2320D9B4-AAE2-400C-92B8-4A260AFF8801} = {530F0C00-0D2E-4094-95EC-2711901E4C38}
+	EndGlobalSection
+EndGlobal
