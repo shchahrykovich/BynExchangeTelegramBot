@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +17,7 @@ namespace BynExchangeTelegramBot
     {
         private static readonly TelegramBotClient Bot = new TelegramBotClient(Environment.GetEnvironmentVariable("BYN-EXCHANGE-BOT-API-KEY"));
         private static CancellationTokenSource TokenSource = new CancellationTokenSource();
+
         public static void Main(string[] args)
         {            
             Console.CancelKeyPress += (o, e) =>
@@ -40,7 +43,12 @@ namespace BynExchangeTelegramBot
         {
             var message = messageEventArgs.Message;
 
-            if (message == null || message.Type != MessageType.TextMessage) return;
+            if (message == null || message.Type != MessageType.TextMessage)
+            {
+                return;
+            }
+
+            Console.WriteLine($"Request from {message.Chat.Username}.");
 
             if (message.Text.StartsWith("/rate"))
             {
@@ -48,14 +56,16 @@ namespace BynExchangeTelegramBot
                 {
                     var now = DateTime.UtcNow;
                     var date = now.ToString("yyyy-MM-dd");
-                    var usd = await SendRate(message, client, 145, date);
-                    var eur = await SendRate(message, client, 292, date);
-                    var rus = await SendRate(message, client, 298, date);
-                    var gbp = await SendRate(message, client, 143, date);
-                    var ukr = await SendRate(message, client, 290, date);
+                    var allRates = await GetRates(client, date);
+
+                    var usd = allRates.FirstOrDefault(r => r.Cur_ID == 145);
+                    var eur = allRates.FirstOrDefault(r => r.Cur_ID == 292);
+                    var rus = allRates.FirstOrDefault(r => r.Cur_ID == 298);
+                    var gbp = allRates.FirstOrDefault(r => r.Cur_ID == 143);
+                    var ukr = allRates.FirstOrDefault(r => r.Cur_ID == 290);
 
                     var text = "Rates for " + now.ToString("MMMM dd") + ":\n";
-                    foreach(var rate in new [] { usd, eur, gbp, rus, ukr })
+                    foreach (var rate in new[] { usd, eur, gbp, rus, ukr })
                     {
                         text += $"{rate.Cur_Abbreviation} {rate.Cur_Scale} = BYN {rate.Cur_OfficialRate}\n";
                     }
@@ -66,19 +76,20 @@ namespace BynExchangeTelegramBot
             else
             {
                 var usage = @"Usage:
-/rate - returns current excahnge rate
+/rate - returns current exchange rate
 ";
                 await Bot.SendTextMessageAsync(message.Chat.Id, usage, replyMarkup: new ReplyKeyboardHide());
             }
         }
 
-        private static async Task<ExchangeRate> SendRate(Message message, HttpClient client, int currency, string date)
+        private static async Task<ExchangeRate[]> GetRates(HttpClient client, string date)
         {
-            var url = $"http://www.nbrb.by/API/ExRates/Rates/{currency}?onDate={date}&Periodicity=0";
+            var url = $"http://www.nbrb.by/API/ExRates/Rates?onDate={date}&Periodicity=0";
             var resp = await client.GetAsync(url);
             var rawObj = await resp.Content.ReadAsStringAsync();
-            ExchangeRate rate = JsonConvert.DeserializeObject<ExchangeRate>(rawObj);
-            return rate;
+            ExchangeRate[] rates = JsonConvert.DeserializeObject<ExchangeRate[]>(rawObj);
+
+            return rates;
         }
     }
 }
