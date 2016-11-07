@@ -52,7 +52,9 @@ namespace BynExchangeTelegramBot
 
             Console.WriteLine($"Request from {message.Chat.Username}.");
 
-            if (message.Text.StartsWith("/rate"))
+            if (message.Text.StartsWith("/rate") 
+                || message.Text.Equals("rate", StringComparison.OrdinalIgnoreCase)
+                || message.Text.Equals("rates", StringComparison.OrdinalIgnoreCase))
             {
                 using (HttpClient client = new HttpClient())
                 {
@@ -69,7 +71,7 @@ namespace BynExchangeTelegramBot
                     var text = "Rates for " + now.ToString("MMMM dd") + ":\n";
                     foreach (var rate in new[] { usd, eur, gbp, rus, ukr })
                     {
-                        text += $"{rate.Cur_Abbreviation} {rate.Cur_Scale} = BYN {rate.Cur_OfficialRate}\n";
+                        text += $"{rate.Cur_Scale} {rate.Cur_Abbreviation} = {rate.Cur_OfficialRate} BYN\n";
                     }
 
                     await Bot.SendTextMessageAsync(message.Chat.Id, text, replyMarkup: new ReplyKeyboardHide());
@@ -114,7 +116,7 @@ namespace BynExchangeTelegramBot
                             text += $"{amount} {curAbbreviation.ToUpper()} = {amountInByn} BYN\n";
                             foreach (var rate in new[] { usd, eur, gbp, rus, ukr }.Where(r => r != cur))
                             {
-                                text += $"{amount} {curAbbreviation} = {amountInByn * rate.Cur_Scale / rate.Cur_OfficialRate} {rate.Cur_Abbreviation}\n";
+                                text += $"{amount} {curAbbreviation.ToUpper()} = {amountInByn * rate.Cur_Scale / rate.Cur_OfficialRate} {rate.Cur_Abbreviation}\n";
                             }
 
                             await Bot.SendTextMessageAsync(message.Chat.Id, text, replyMarkup: new ReplyKeyboardHide());
