@@ -101,7 +101,7 @@ namespace BynExchangeTelegramBot
                         var text = "Rates for " + now.ToString("MMMM dd") + ":\n";
                         foreach (var rate in new[] { usd, eur, gbp, rus, ukr })
                         {
-                            text += $"{amount} {curAbbreviation} = {amount * rate.Cur_Scale / rate.Cur_OfficialRate} {rate.Cur_Abbreviation}\n";
+                            text += $"{amount} {curAbbreviation.ToUpper()} = {amount * rate.Cur_Scale / rate.Cur_OfficialRate} {rate.Cur_Abbreviation}\n";
                         }
 
                         await Bot.SendTextMessageAsync(message.Chat.Id, text, replyMarkup: new ReplyKeyboardHide());
