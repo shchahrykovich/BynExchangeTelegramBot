@@ -1,17 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.25914.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{530F0C00-0D2E-4094-95EC-2711901E4C38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BynExchangeTelegramBot", "src\BynExchangeTelegramBot\BynExchangeTelegramBot.csproj", "{1ABEFD7D-DEC9-4965-8250-3EC43C5BB29D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5026E860-0BB7-49F9-8218-5EA0ACA0DEF4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4ACA8F3A-87EF-44F1-8CFE-58C109887BA2}"
 	ProjectSection(SolutionItems) = preProject
+		CreateContainer.ps1 = CreateContainer.ps1
 		Dockerfile = Dockerfile
-		global.json = global.json
+		readme.md = readme.md
 	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BynExchangeTelegramBot", "src\BynExchangeTelegramBot\BynExchangeTelegramBot.xproj", "{2320D9B4-AAE2-400C-92B8-4A260AFF8801}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,15 +18,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2320D9B4-AAE2-400C-92B8-4A260AFF8801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ABEFD7D-DEC9-4965-8250-3EC43C5BB29D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ABEFD7D-DEC9-4965-8250-3EC43C5BB29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ABEFD7D-DEC9-4965-8250-3EC43C5BB29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ABEFD7D-DEC9-4965-8250-3EC43C5BB29D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2320D9B4-AAE2-400C-92B8-4A260AFF8801} = {530F0C00-0D2E-4094-95EC-2711901E4C38}
 	EndGlobalSection
 EndGlobal

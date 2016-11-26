@@ -21,7 +21,7 @@ namespace BynExchangeTelegramBot
         private static CancellationTokenSource TokenSource = new CancellationTokenSource();
 
         public static void Main(string[] args)
-        {            
+        {
             Console.CancelKeyPress += (o, e) =>
             {
                 e.Cancel = true;
@@ -52,7 +52,7 @@ namespace BynExchangeTelegramBot
 
             Console.WriteLine($"Request from {message.Chat.Username}.");
 
-            if (message.Text.StartsWith("/rate") 
+            if (message.Text.StartsWith("/rate")
                 || message.Text.Equals("rate", StringComparison.OrdinalIgnoreCase)
                 || message.Text.Equals("rates", StringComparison.OrdinalIgnoreCase))
             {
