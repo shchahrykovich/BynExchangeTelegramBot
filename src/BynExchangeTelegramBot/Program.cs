@@ -59,19 +59,25 @@ namespace BynExchangeTelegramBot
                 using (HttpClient client = new HttpClient())
                 {
                     var now = DateTime.UtcNow;
-                    var date = now.ToString("yyyy-MM-dd");
-                    var allRates = await GetRates(client, date);
+                    var allRatesForNow = await GetRates(client, now.ToString("yyyy-MM-dd"));
+                    var allRatesWeekAgo = await GetRates(client, now.AddDays(-7).ToString("yyyy-MM-dd"));
+                    var allRatesMonthAgo = await GetRates(client, now.AddMonths(-1).ToString("yyyy-MM-dd"));
 
-                    var usd = allRates.FirstOrDefault(r => r.Cur_ID == 145);
-                    var eur = allRates.FirstOrDefault(r => r.Cur_ID == 292);
-                    var rus = allRates.FirstOrDefault(r => r.Cur_ID == 298);
-                    var gbp = allRates.FirstOrDefault(r => r.Cur_ID == 143);
-                    var ukr = allRates.FirstOrDefault(r => r.Cur_ID == 290);
+                    var usd = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 145);
+                    var eur = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 292);
+                    var rus = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 298);
+                    var gbp = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 143);
+                    var ukr = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 290);
 
                     var text = "Rates for " + now.ToString("MMMM dd") + ":\n";
                     foreach (var rate in new[] { usd, eur, gbp, rus, ukr })
                     {
-                        text += $"{rate.Cur_Scale} {rate.Cur_Abbreviation} = {rate.Cur_OfficialRate} BYN\n";
+                        var officialRateForToday = Math.Round(rate.Cur_OfficialRate, 2);
+                        var officialRateWeekAgo = allRatesWeekAgo.SingleOrDefault(r => r.Cur_ID == rate.Cur_ID);
+                        var officialRateMonthAgo = allRatesMonthAgo.SingleOrDefault(r => r.Cur_ID == rate.Cur_ID);
+                        var weekGrowth = Math.Round((rate.Cur_OfficialRate / officialRateWeekAgo.Cur_OfficialRate) * 100 - 100, 2);
+                        var monthGrowth = Math.Round((rate.Cur_OfficialRate / officialRateMonthAgo.Cur_OfficialRate) * 100 - 100, 2);
+                        text += $"{rate.Cur_Scale} {rate.Cur_Abbreviation} = {officialRateForToday} ({weekGrowth} %, {monthGrowth} %) BYN\n";
                     }
 
                     await Bot.SendTextMessageAsync(message.Chat.Id, text, replyMarkup: new ReplyKeyboardHide());
@@ -87,28 +93,28 @@ namespace BynExchangeTelegramBot
                 using (HttpClient client = new HttpClient())
                 {
                     var now = DateTime.UtcNow;
-                    var date = now.ToString("yyyy-MM-dd");
-                    var allRates = await GetRates(client, date);
+                    var allRatesForNow = await GetRates(client, now.ToString("yyyy-MM-dd"));                    
 
-                    var usd = allRates.FirstOrDefault(r => r.Cur_ID == 145);
-                    var eur = allRates.FirstOrDefault(r => r.Cur_ID == 292);
-                    var rus = allRates.FirstOrDefault(r => r.Cur_ID == 298);
-                    var gbp = allRates.FirstOrDefault(r => r.Cur_ID == 143);
-                    var ukr = allRates.FirstOrDefault(r => r.Cur_ID == 290);
+                    var usd = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 145);
+                    var eur = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 292);
+                    var rus = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 298);
+                    var gbp = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 143);
+                    var ukr = allRatesForNow.FirstOrDefault(r => r.Cur_ID == 290);
 
                     if (0 == String.Compare(curAbbreviation, "BYN", true))
                     {
                         var text = "Rates for " + now.ToString("MMMM dd") + ":\n";
                         foreach (var rate in new[] { usd, eur, gbp, rus, ukr })
                         {
-                            text += $"{amount} {curAbbreviation.ToUpper()} = {amount * rate.Cur_Scale / rate.Cur_OfficialRate} {rate.Cur_Abbreviation}\n";
+                            var result = amount * rate.Cur_Scale / rate.Cur_OfficialRate;
+                            text += $"{amount} {curAbbreviation.ToUpper()} = {Math.Round(result, 2)} {rate.Cur_Abbreviation}\n";
                         }
 
                         await Bot.SendTextMessageAsync(message.Chat.Id, text, replyMarkup: new ReplyKeyboardHide());
                     }
                     else
                     {
-                        var cur = allRates.FirstOrDefault(r => 0 == String.Compare(r.Cur_Abbreviation, curAbbreviation, true));
+                        var cur = allRatesForNow.FirstOrDefault(r => 0 == String.Compare(r.Cur_Abbreviation, curAbbreviation, true));
                         if (null != cur)
                         {
                             var text = "Rates for " + now.ToString("MMMM dd") + ":\n";
@@ -116,7 +122,8 @@ namespace BynExchangeTelegramBot
                             text += $"{amount} {curAbbreviation.ToUpper()} = {amountInByn} BYN\n";
                             foreach (var rate in new[] { usd, eur, gbp, rus, ukr }.Where(r => r != cur))
                             {
-                                text += $"{amount} {curAbbreviation.ToUpper()} = {amountInByn * rate.Cur_Scale / rate.Cur_OfficialRate} {rate.Cur_Abbreviation}\n";
+                                var result = amountInByn * rate.Cur_Scale / rate.Cur_OfficialRate;
+                                text += $"{amount} {curAbbreviation.ToUpper()} = {Math.Round(result, 2)} {rate.Cur_Abbreviation}\n";
                             }
 
                             await Bot.SendTextMessageAsync(message.Chat.Id, text, replyMarkup: new ReplyKeyboardHide());
