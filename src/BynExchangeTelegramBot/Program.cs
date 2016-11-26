@@ -119,7 +119,7 @@ namespace BynExchangeTelegramBot
                         {
                             var text = "Rates for " + now.ToString("MMMM dd") + ":\n";
                             var amountInByn = amount * cur.Cur_OfficialRate / cur.Cur_Scale;
-                            text += $"{amount} {curAbbreviation.ToUpper()} = {amountInByn} BYN\n";
+                            text += $"{amount} {curAbbreviation.ToUpper()} = {Math.Round(amountInByn, 2)} BYN\n";
                             foreach (var rate in new[] { usd, eur, gbp, rus, ukr }.Where(r => r != cur))
                             {
                                 var result = amountInByn * rate.Cur_Scale / rate.Cur_OfficialRate;
